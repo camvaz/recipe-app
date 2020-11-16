@@ -8,7 +8,7 @@ import SEO from "components/SEO/SEO"
 
 interface indexProps {}
 
-const index: React.FC<indexProps> = ({}) => {
+const index: React.FC<indexProps> = () => {
   const [searchText, setSearchText] = useState("")
   const size = useContext(ResponsiveContext)
 
