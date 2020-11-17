@@ -124,7 +124,6 @@ const Registro: React.FC<RegistroProps> = () => {
                   type="submit"
                   label="Iniciar sesión"
                   primary
-                  size={size}
                   color="dark-1"
                 />
               </Form>

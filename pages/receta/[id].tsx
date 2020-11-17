@@ -35,7 +35,7 @@ const RecipeID: React.FC<
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const { id } = context.params
+  const id = context.params?.id
   if (!id)
     return {
       props: { data: { error: { code: 400, message: "ID Not Found" } } },
@@ -43,7 +43,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
   const success = await firestore
     .collection("recetas")
-    .doc(id)
+    .doc(id as string)
     .get()
     .then((res) =>
       res.exists

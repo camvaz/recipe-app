@@ -37,7 +37,6 @@ const Login: React.FC<LoginProps> = ({}) => {
             primary
             color="dark-1"
             label="Registrate aquí"
-            size={size}
             onClick={(e) => {
               e.persist()
               router.push("/registro")
@@ -98,7 +97,6 @@ const Login: React.FC<LoginProps> = ({}) => {
                   style={{ display: "block", width: "100%" }}
                   type="submit"
                   label="Iniciar sesión"
-                  size={size}
                   primary
                   color="dark-1"
                 />

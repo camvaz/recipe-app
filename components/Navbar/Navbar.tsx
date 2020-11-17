@@ -29,10 +29,9 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
           color="dark-1"
           label="Iniciar Sesión"
           margin={{ right: "small" }}
-          size={size}
           href="/login"
         />
-        <Button size={size} href="/registro" color="dark-1" label="Registro" />
+        <Button href="/registro" color="dark-1" label="Registro" />
       </Box>
     </Header>
   )
