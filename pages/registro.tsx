@@ -42,7 +42,14 @@ const Registro: React.FC<RegistroProps> = () => {
           }}
           validationSchema={validationSchema}
         >
-          {({ values, setValues, errors, touched, setTouched }) => {
+          {({
+            values,
+            setValues,
+            errors,
+            touched,
+            setTouched,
+            isSubmitting,
+          }) => {
             const onChangeValues = (e: any) => {
               e.persist()
               const value = e.target.value
@@ -105,7 +112,7 @@ const Registro: React.FC<RegistroProps> = () => {
                       </Text>
                     ) : null
                   }
-                  label="Contraseña"
+                  label="Confirmar contraseña"
                   required
                 >
                   <TextInput
@@ -122,7 +129,17 @@ const Registro: React.FC<RegistroProps> = () => {
                   margin={{ top: "large" }}
                   style={{ display: "block", width: "100%" }}
                   type="submit"
-                  label="Iniciar sesión"
+                  disabled={
+                    values.email.length === 0 ||
+                    values.password.length === 0 ||
+                    values.confirmPassword.length === 0 ||
+                    typeof errors.email !== "undefined" ||
+                    typeof errors.password !== "undefined" ||
+                    typeof errors.confirmPassword !== "undefined" ||
+                    values.confirmPassword !== values.password ||
+                    isSubmitting
+                  }
+                  label="Registrar"
                   primary
                   color="dark-1"
                 />

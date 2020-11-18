@@ -9,10 +9,16 @@ interface AuthComponentProps {}
 const AuthComponent: React.FC<AuthComponentProps> = ({ children }) => {
   const router = useRouter()
   const size = useContext(ResponsiveContext)
-  console.log(size)
+
   return (
     <Box justify="center" align="center" height="100vh" direction="column">
-      <Box direction="row" align="center" margin={{ bottom: "large" }}>
+      <Box
+        onClick={() => router.push("/")}
+        style={{ cursor: "pointer" }}
+        direction="row"
+        align="center"
+        margin={{ bottom: "large" }}
+      >
         <Cafeteria color="#000" size={size} />
         <Heading size={size} margin={{ left: "small", vertical: "none" }}>
           FridgeCook

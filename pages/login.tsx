@@ -48,7 +48,14 @@ const Login: React.FC<LoginProps> = ({}) => {
           onSubmit={() => {}}
           validationSchema={validationSchema}
         >
-          {({ values, setValues, errors, touched, setTouched }) => {
+          {({
+            values,
+            setValues,
+            errors,
+            touched,
+            setTouched,
+            isSubmitting,
+          }) => {
             const onChangeValues = (e: any) => {
               e.persist()
               const value = e.target.value
@@ -97,6 +104,13 @@ const Login: React.FC<LoginProps> = ({}) => {
                   style={{ display: "block", width: "100%" }}
                   type="submit"
                   label="Iniciar sesión"
+                  disabled={
+                    values.email.length === 0 ||
+                    values.password.length === 0 ||
+                    typeof errors.email !== "undefined" ||
+                    typeof errors.password !== "undefined" ||
+                    isSubmitting
+                  }
                   primary
                   color="dark-1"
                 />
