@@ -1,5 +1,14 @@
 import React, { useContext } from "react"
-import { Box, Paragraph, ResponsiveContext, Tab, Tabs, Text } from "grommet"
+import {
+  Box,
+  Button,
+  Heading,
+  Paragraph,
+  ResponsiveContext,
+  Tab,
+  Tabs,
+  Text,
+} from "grommet"
 import Image from "next/image"
 import { GetServerSidePropsContext } from "next"
 
@@ -37,21 +46,26 @@ const RecipeID: React.FC<
               alt="Unsplash"
               priority
               sizes="(max-width:350px) 350px, 500px"
-              width={720}
-              height={420}
+              width={"auto"}
+              height={300}
             />
-            {/* {data && JSON.stringify(data, null, 0)} */}
             <Box
               direction="row"
               margin={{ vertical: "medium" }}
               justify="around"
               align="center"
             >
-              <Text margin={{ right: "large" }}>{success.nombre}</Text>
-              <Box direction="row" align="center">
-                <Star />
-                <Text> Agregar a favoritos</Text>
-              </Box>
+              <Heading margin={{ right: "large", vertical: "none" }}>
+                {success.nombre}
+              </Heading>
+              <Button
+                label="Agregar a favoritos"
+                primary
+                gap="xxsmall"
+                icon={<Star />}
+                size="small"
+                color="dark-1"
+              />
             </Box>
             <Tabs>
               <Tab title="Ingredientes">
