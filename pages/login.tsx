@@ -1,6 +1,8 @@
 import React, { useContext } from "react"
 import * as yup from "yup"
 import { Form, Formik } from "formik"
+import { Lock, MailOption } from "grommet-icons"
+import { useRouter } from "next/router"
 import {
   Box,
   Button,
@@ -9,8 +11,6 @@ import {
   Text,
   TextInput,
 } from "grommet"
-import { Lock, MailOption } from "grommet-icons"
-import { useRouter } from "next/router"
 
 import AuthLayout from "components/AuthLayout/AuthLayout"
 import SEO from "components/SEO/SEO"
@@ -25,6 +25,7 @@ const validationSchema = yup.object({
 const Login: React.FC<LoginProps> = ({}) => {
   const router = useRouter()
   const size = useContext(ResponsiveContext)
+
   return (
     <AuthLayout>
       <SEO title="Entrar" />

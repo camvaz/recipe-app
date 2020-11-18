@@ -16,7 +16,7 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
       align="center"
       width="100%"
     >
-      <Menu fill="dark-1" color="dark-1" size={size} />
+      <Menu fill="dark-1" color="dark-1" size={"medium"} />
       <Box direction="row" align="center" onClick={() => router.push("/")}>
         <Cafeteria color="dark-1" size={size} />
         <Heading size={size} margin={{ left: "small", vertical: "none" }}>

@@ -1,6 +1,7 @@
 import React, { useContext } from "react"
 import * as yup from "yup"
 import { Form, Formik } from "formik"
+import { MailOption, Lock } from "grommet-icons"
 import {
   Box,
   FormField,
@@ -9,7 +10,6 @@ import {
   Button,
   ResponsiveContext,
 } from "grommet"
-import { MailOption, Lock } from "grommet-icons"
 
 import { FirebaseContext } from "../context/FirebaseContext"
 import AuthLayout from "components/AuthLayout/AuthLayout"
