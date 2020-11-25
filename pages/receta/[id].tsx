@@ -1,4 +1,7 @@
 import React, { useCallback, useContext, useEffect, useState } from "react"
+import { GetServerSidePropsContext } from "next"
+import { useRouter } from "next/router"
+import Image from "next/image"
 import {
   Box,
   Button,
@@ -10,8 +13,6 @@ import {
   Text,
 } from "grommet"
 import { Star } from "grommet-icons"
-import Image from "next/image"
-import { GetServerSidePropsContext } from "next"
 
 import AppLayout from "components/AppLayout/AppLayout"
 import SEO from "components/SEO/SEO"
@@ -21,7 +22,6 @@ import { SSRError } from "models/SSRError"
 import NotFound from "components/NotFound/NotFound"
 import { FirebaseContext } from "context/FirebaseContext"
 import { Opinion } from "models/Opinion"
-import { useRouter } from "next/router"
 
 interface RecipeProps {}
 
@@ -36,7 +36,7 @@ const RecipeID: React.FC<
   const { id } = router.query
 
   const fetchOpiniones = useCallback(() => {
-    if (!id) return
+    if (!id || error) return
     else
       firestore
         .collection("recetas")
@@ -48,6 +48,7 @@ const RecipeID: React.FC<
             tempOpinons.push({ id: doc.id, ...doc.data() } as Opinion)
           })
           setOpinions(() => tempOpinons)
+          console.log("object")
         })
   }, [id, setOpinions, firestore])
 
