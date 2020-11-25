@@ -48,7 +48,6 @@ const RecipeID: React.FC<
             tempOpinons.push({ id: doc.id, ...doc.data() } as Opinion)
           })
           setOpinions(() => tempOpinons)
-          console.log("object")
         })
   }, [id, setOpinions, firestore])
 

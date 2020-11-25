@@ -51,7 +51,7 @@ const index: React.FC<
             <Box
               key={i}
               style={{ cursor: "pointer" }}
-              pad="medium"
+              pad={{ horizontal: "medium", top: "medium", bottom: "small" }}
               height="fit-content"
               border={{ style: "groove" }}
               onClick={() => router.push(`/receta/${id}`)}
