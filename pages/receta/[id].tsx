@@ -1,4 +1,4 @@
-import React, { useContext } from "react"
+import React, { useCallback, useContext, useEffect, useState } from "react"
 import {
   Box,
   Button,
@@ -9,6 +9,7 @@ import {
   Tabs,
   Text,
 } from "grommet"
+import { Star } from "grommet-icons"
 import Image from "next/image"
 import { GetServerSidePropsContext } from "next"
 
@@ -18,7 +19,9 @@ import { firestore } from "pages/_app"
 import { Recipe } from "models/Recipe"
 import { SSRError } from "models/SSRError"
 import NotFound from "components/NotFound/NotFound"
-import { Star } from "grommet-icons"
+import { FirebaseContext } from "context/FirebaseContext"
+import { Opinion } from "models/Opinion"
+import { useRouter } from "next/router"
 
 interface RecipeProps {}
 
@@ -26,7 +29,32 @@ const RecipeID: React.FC<
   RecipeProps & { data: { success?: Recipe; error?: SSRError } }
 > = ({ data }) => {
   const size = useContext(ResponsiveContext)
+  const router = useRouter()
+  const { firestore } = useContext(FirebaseContext)
+  const [opinions, setOpinions] = useState<Opinion[]>([])
   const { success, error } = data
+  const { id } = router.query
+
+  const fetchOpiniones = useCallback(() => {
+    if (!id) return
+    else
+      firestore
+        .collection("recetas")
+        .doc(id as string)
+        .collection("opiniones")
+        .onSnapshot((docs) => {
+          const tempOpinons: Opinion[] = []
+          docs.forEach((doc) => {
+            tempOpinons.push({ id: doc.id, ...doc.data() } as Opinion)
+          })
+          setOpinions(() => tempOpinons)
+        })
+  }, [id, setOpinions, firestore])
+
+  useEffect(() => {
+    fetchOpiniones()
+    return () => {}
+  }, [id])
 
   return (
     <AppLayout>
@@ -74,7 +102,7 @@ const RecipeID: React.FC<
               <Tab title="Preparación">
                 <Paragraph>{success.preparacion}</Paragraph>
               </Tab>
-              <Tab title="Opiniones"></Tab>
+              <Tab title="Opiniones">{JSON.stringify(opinions, null, 2)}</Tab>
             </Tabs>
           </Box>
         </>
@@ -110,12 +138,11 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     )
     .catch(() => null)
 
-  if (!success)
-    return {
-      props: { data: { error: { code: 404, message: "Recipe Not Found" } } },
-    }
-
-  return { props: { data: { success } } }
+  return !success
+    ? {
+        props: { data: { error: { code: 404, message: "Recipe Not Found" } } },
+      }
+    : { props: { data: { success } } }
 }
 
 export default RecipeID

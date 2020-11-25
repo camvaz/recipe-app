@@ -78,19 +78,18 @@ export async function getServerSideProps() {
     .get()
     .then((docs) => {
       const recipes: Recipe[] = []
-      docs.forEach((doc) =>
+      docs.forEach((doc) => {
         recipes.push({ ...doc.data(), id: doc.id } as Recipe)
-      )
+      })
       return recipes
     })
     .catch(() => null)
 
-  if (!success)
-    return {
-      props: { data: { error: { code: 404, message: "Recipe Not Found" } } },
-    }
-
-  return { props: { data: { success } } }
+  return !success
+    ? {
+        props: { data: { error: { code: 404, message: "Recipe Not Found" } } },
+      }
+    : { props: { data: { success } } }
 }
 
 export default index

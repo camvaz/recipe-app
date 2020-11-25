@@ -4,5 +4,4 @@ export interface Recipe {
   imagen: string
   preparacion: string
   ingredientes: string[]
-  opiniones: string[]
 }
