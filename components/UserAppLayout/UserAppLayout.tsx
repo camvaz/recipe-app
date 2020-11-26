@@ -8,13 +8,13 @@ interface UserAppLayoutProps {}
 
 const UserAppLayout: React.FC<UserAppLayoutProps> = ({ children }) => {
   const { auth } = useContext(FirebaseContext)
-  const [user] = useAuthState(auth)
+  const [user, loading, error] = useAuthState(auth)
   const router = useRouter()
 
   useEffect(() => {
-    if (!user) router.push("/login")
+    if ((!user && !loading) || error) router.push("/login")
     return () => {}
-  }, [user])
+  }, [user, loading, error, router])
 
   return <AppLayout>{children}</AppLayout>
 }
