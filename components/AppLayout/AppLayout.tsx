@@ -1,10 +1,14 @@
 import React, { useContext, useState } from "react"
 import Link from "next/link"
-import { Box, Button, ResponsiveContext } from "grommet"
+import { useRouter } from "next/router"
+import { Box, Button, Heading, ResponsiveContext } from "grommet"
+import { Cafeteria } from "grommet-icons"
+import { css, styled } from "goober"
 import { slide as Menu } from "react-burger-menu"
+import { useAuthState } from "react-firebase-hooks/auth"
 
 import Navbar from "components/Navbar/Navbar"
-import { css, styled } from "goober"
+import { FirebaseContext } from "context/FirebaseContext"
 
 const OuterContainer = styled("div")`
   .bm-menu {
@@ -24,7 +28,10 @@ const OuterContainer = styled("div")`
 interface AppLayoutProps {}
 
 const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
+  const { auth } = useContext(FirebaseContext)
+  const [user] = useAuthState(auth)
   const size = useContext(ResponsiveContext)
+  const router = useRouter()
   const [openMenu, setOpenMenu] = useState<boolean>(false)
 
   return (
@@ -40,20 +47,48 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
           display: ${openMenu ? "block" : "none"};
         `}
       >
+        <Box
+          onClick={() => router.push("/")}
+          direction="row"
+          align="center"
+          justify="center"
+          style={{ display: "flex", cursor: "pointer", outline: "none" }}
+          alignSelf="center"
+          margin={{ bottom: "large" }}
+        >
+          <Cafeteria color="#fff" size={"24px"} />
+          <Heading
+            size={"24px"}
+            color={"#fff"}
+            style={{ width: "fit-content" }}
+            margin={{ left: "small", vertical: "none" }}
+          >
+            FridgeCook
+          </Heading>
+        </Box>
         <Link href="/">Inicio</Link>
-        <Button
-          primary
-          label="Iniciar sesión"
-          style={{ color: "#000" }}
-          href="/login"
-          color="light-1"
-        />
-        <Button
-          label="Registro"
-          href="/login"
-          style={{ border: "1px solid #fff" }}
-          color="dark-1"
-        />
+        {!user ? (
+          <>
+            <Button
+              primary
+              label="Iniciar sesión"
+              style={{ color: "#000" }}
+              href="/login"
+              color="light-1"
+            />
+            <Button
+              label="Registro"
+              href="/registro"
+              style={{ border: "1px solid #fff" }}
+              color="dark-1"
+            />
+          </>
+        ) : (
+          <>
+            <Link href="/">Crear receta</Link>
+            <Link href="/">Mis favoritos</Link>
+          </>
+        )}
       </Menu>
       <main id="page-wrap">
         <Box

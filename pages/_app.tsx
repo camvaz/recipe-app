@@ -6,6 +6,7 @@ import { AppProps } from "next/app"
 import { Grommet } from "grommet"
 import { setup } from "goober"
 import { prefix } from "goober-autoprefixer"
+import { ToastProvider } from "react-toast-notifications"
 
 import { FirebaseContext } from "../context/FirebaseContext"
 
@@ -42,7 +43,9 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <FirebaseContext.Provider value={{ firestore, auth }}>
       <Grommet theme={theme}>
-        <Component {...pageProps} />
+        <ToastProvider placement="bottom-center" autoDismiss={5000}>
+          <Component {...pageProps} />
+        </ToastProvider>
       </Grommet>
     </FirebaseContext.Provider>
   )

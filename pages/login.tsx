@@ -14,6 +14,8 @@ import {
 
 import AuthLayout from "components/AuthLayout/AuthLayout"
 import SEO from "components/SEO/SEO"
+import { FirebaseContext } from "context/FirebaseContext"
+import { useToasts } from "react-toast-notifications"
 
 interface LoginProps {}
 
@@ -23,8 +25,10 @@ const validationSchema = yup.object({
 })
 
 const Login: React.FC<LoginProps> = ({}) => {
+  const { auth } = useContext(FirebaseContext)
   const router = useRouter()
   const size = useContext(ResponsiveContext)
+  const { addToast } = useToasts()
 
   return (
     <AuthLayout>
@@ -46,7 +50,23 @@ const Login: React.FC<LoginProps> = ({}) => {
         </Box>
         <Formik
           initialValues={{ email: "", password: "" }}
-          onSubmit={() => {}}
+          onSubmit={async (values, { setSubmitting }) => {
+            setSubmitting(true)
+            await auth
+              .signInWithEmailAndPassword(values.email, values.password)
+              .then(() => router.push("/"))
+              .catch((err) => {
+                console.log(err)
+                const errorMessage =
+                  err.code === "auth/user-not-found"
+                    ? "Cuenta no existe"
+                    : "auth/wrong-password"
+                    ? "Contraseña o correo incorrectos"
+                    : ""
+                addToast(errorMessage, { appearance: "warning" })
+              })
+            setSubmitting(false)
+          }}
           validationSchema={validationSchema}
         >
           {({

@@ -1,4 +1,5 @@
 import React, { useContext } from "react"
+import { useRouter } from "next/router"
 import * as yup from "yup"
 import { Form, Formik } from "formik"
 import { MailOption, Lock } from "grommet-icons"
@@ -25,6 +26,7 @@ const validationSchema = yup.object({
 
 const Registro: React.FC<RegistroProps> = () => {
   const { firestore, auth } = useContext(FirebaseContext)
+  const router = useRouter()
   const size = useContext(ResponsiveContext)
   const registerUser = (email: string, password: string) =>
     auth.createUserWithEmailAndPassword(email, password)
@@ -35,10 +37,12 @@ const Registro: React.FC<RegistroProps> = () => {
       <Box align="center" justify="center" width="350px">
         <Formik
           initialValues={{ email: "", password: "", confirmPassword: "" }}
-          onSubmit={async ({ email, password }) => {
-            await registerUser(email, password).then((res) =>
-              firestore.collection("users").add({ email, recetas: [] })
-            )
+          onSubmit={({ email, password }) => {
+            registerUser(email, password)
+              .then(() =>
+                firestore.collection("users").add({ email, favoritos: [] })
+              )
+              .then(() => router.push("/"))
           }}
           validationSchema={validationSchema}
         >

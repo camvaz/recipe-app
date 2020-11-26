@@ -1,13 +1,17 @@
+import React, { Dispatch, SetStateAction, useContext } from "react"
+import { useRouter } from "next/router"
 import { Box, Button, Header, Heading, ResponsiveContext } from "grommet"
 import { Cafeteria, Menu } from "grommet-icons"
-import { useRouter } from "next/router"
-import React, { Dispatch, SetStateAction, useContext } from "react"
+import { useAuthState } from "react-firebase-hooks/auth"
+import { FirebaseContext } from "context/FirebaseContext"
 
 interface NavbarProps {
   setOpenMenu: Dispatch<SetStateAction<boolean>>
 }
 
 const Navbar: React.FC<NavbarProps> = ({ setOpenMenu }) => {
+  const { auth } = useContext(FirebaseContext)
+  const [user] = useAuthState(auth)
   const size = useContext(ResponsiveContext)
   const router = useRouter()
 
@@ -31,16 +35,28 @@ const Navbar: React.FC<NavbarProps> = ({ setOpenMenu }) => {
           FridgeCook
         </Heading>
       </Box>
-      <Box direction="row">
+      {!user ? (
+        <Box direction="row">
+          <Button
+            primary
+            color="dark-1"
+            label="Iniciar Sesión"
+            margin={{ right: "small" }}
+            href="/login"
+          />
+          <Button href="/registro" color="dark-1" label="Registro" />
+        </Box>
+      ) : (
         <Button
           primary
           color="dark-1"
-          label="Iniciar Sesión"
+          label="Cerrar Sesión"
           margin={{ right: "small" }}
-          href="/login"
+          onClick={() => {
+            auth.signOut().then(() => {})
+          }}
         />
-        <Button href="/registro" color="dark-1" label="Registro" />
-      </Box>
+      )}
     </Header>
   )
 }
