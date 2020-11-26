@@ -10,6 +10,8 @@
   "dependencies": {
     "firebase": "^8.0.2",
     "formik": "^2.2.5",
+    "goober": "^2.0.15",
+    "goober-autoprefixer": "^1.2.1",
     "grommet": "^2.15.2",
     "grommet-icons": "^4.5.0",
     "lottie-web": "^5.7.4",

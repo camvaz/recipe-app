@@ -1,4 +1,4 @@
-import React, { useContext } from "react"
+import React, { useContext, useState } from "react"
 import { Box, ResponsiveContext } from "grommet"
 import { slide as Menu } from "react-burger-menu"
 
@@ -8,18 +8,30 @@ interface AppLayoutProps {}
 
 const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
   const size = useContext(ResponsiveContext)
+  const [openMenu, setOpenMenu] = useState<boolean>(false)
   return (
-    <Box
-      width="100%"
-      direction="column"
-      justify="center"
-      align="center"
-      pad={{ horizontal: size }}
-    >
-      <Menu />
-      <Navbar />
-      {children}
-    </Box>
+    <div id="outer-container">
+      <Menu
+        pageWrapId={"page-wrap"}
+        outerContainerId={"outer-container"}
+        isOpen={openMenu}
+        onOpen={() => setOpenMenu(true)}
+        onClose={() => setOpenMenu(false)}
+        onStateChange={(state: any) => state.isOpen}
+      />
+      <main id="page-wrap">
+        <Box
+          width="100%"
+          direction="column"
+          justify="center"
+          align="center"
+          pad={{ horizontal: size }}
+        >
+          <Navbar setOpenMenu={setOpenMenu} />
+          {children}
+        </Box>
+      </main>
+    </div>
   )
 }
 

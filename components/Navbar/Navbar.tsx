@@ -1,11 +1,13 @@
 import { Box, Button, Header, Heading, ResponsiveContext } from "grommet"
 import { Cafeteria, Menu } from "grommet-icons"
 import { useRouter } from "next/router"
-import React, { useContext } from "react"
+import React, { Dispatch, SetStateAction, useContext } from "react"
 
-interface NavbarProps {}
+interface NavbarProps {
+  setOpenMenu: Dispatch<SetStateAction<boolean>>
+}
 
-const Navbar: React.FC<NavbarProps> = ({}) => {
+const Navbar: React.FC<NavbarProps> = ({ setOpenMenu }) => {
   const size = useContext(ResponsiveContext)
   const router = useRouter()
 
@@ -21,6 +23,7 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
         color="dark-1"
         size={"medium"}
         style={{ cursor: "pointer" }}
+        onClick={() => setOpenMenu((x) => !x)}
       />
       <Box direction="row" align="center" onClick={() => router.push("/")}>
         <Cafeteria color="dark-1" size={size} />

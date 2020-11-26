@@ -1,12 +1,17 @@
 import "firebase/firestore"
 import "firebase/auth"
+import React from "react"
 import firebase from "firebase/app"
 import { AppProps } from "next/app"
 import { Grommet } from "grommet"
+import { setup } from "goober"
+import { prefix } from "goober-autoprefixer"
 
 import { FirebaseContext } from "../context/FirebaseContext"
 
 import "../styles/globals.css"
+
+setup(React.createElement, prefix)
 
 const firebaseConfig = {
   apiKey: "AIzaSyBhkU1Ewwow_Jp12Y08OVKphv2tEAUQiLs",
