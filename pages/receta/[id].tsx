@@ -5,12 +5,16 @@ import Image from "next/image"
 import {
   Box,
   Button,
+  FormField,
   Heading,
+  Markdown,
   Paragraph,
   ResponsiveContext,
   Tab,
   Tabs,
   Text,
+  TextArea,
+  TextInput,
 } from "grommet"
 import { Star } from "grommet-icons"
 import { useToasts } from "react-toast-notifications"
@@ -25,6 +29,7 @@ import NotFound from "components/NotFound/NotFound"
 import { FirebaseContext } from "context/FirebaseContext"
 import { Opinion } from "models/Opinion"
 import useUser from "hooks/useUser"
+import { Form, Formik } from "formik"
 
 interface RecipeProps {}
 
@@ -127,12 +132,94 @@ const RecipeID: React.FC<
             </Box>
             <Tabs>
               <Tab title="Ingredientes">
-                <Paragraph>{success.ingredientes}</Paragraph>
+                <Box margin={{ vertical: "small" }}>
+                  <Markdown>{success.ingredientes}</Markdown>
+                </Box>
               </Tab>
               <Tab title="Preparación">
-                <Paragraph>{success.preparacion}</Paragraph>
+                <Box margin={{ vertical: "small" }}>
+                  <Markdown>{success.preparacion}</Markdown>
+                </Box>
               </Tab>
-              <Tab title="Opiniones">{JSON.stringify(opinions, null, 2)}</Tab>
+              <Tab title="Opiniones">
+                {/* {JSON.stringify(opinions, null, 2)} */}
+                <Box margin={{ top: "medium" }}>
+                  {opinions.map(({ author, message }, i) => (
+                    <Box key={i}>
+                      <Text weight="bold">{author}</Text>
+                      <Paragraph margin={{ top: "small", bottom: "medium" }}>
+                        {message}
+                      </Paragraph>
+                    </Box>
+                  ))}
+                  <Formik
+                    initialValues={{ author: "", message: "" }}
+                    onSubmit={(
+                      { author, message },
+                      { setSubmitting, setValues }
+                    ) => {
+                      setSubmitting(true)
+                      firestore
+                        .collection("recetas")
+                        .doc(id as string)
+                        .collection("opiniones")
+                        .add({ author, message })
+                        .then(() => {
+                          addToast("Comentario agregado con éxito", {
+                            appearance: "success",
+                          })
+                          setValues(() => ({ author: "", message: "" }))
+                        })
+                        .catch(() =>
+                          addToast(
+                            "Error al subir comentario, intenta más tarde.",
+                            { appearance: "error" }
+                          )
+                        )
+                      setSubmitting(false)
+                    }}
+                  >
+                    {({ values, setValues }) => {
+                      const onChangeValues = (e: any) => {
+                        e.persist()
+                        setValues((state) => ({
+                          ...state,
+                          [e.target.name]: e.target.value,
+                        }))
+                      }
+                      return (
+                        <Form>
+                          <Text weight="bold">Deja un comentario</Text>
+                          <FormField label="Autor" required>
+                            <TextInput
+                              size={size}
+                              placeholder="Ingresa tu nombre"
+                              name="author"
+                              value={values.author}
+                              onChange={onChangeValues}
+                            />
+                          </FormField>
+                          <FormField label="Comentario" required>
+                            <TextArea
+                              size={size}
+                              name="message"
+                              placeholder="Escribe aquí..."
+                              value={values.message}
+                              onChange={onChangeValues}
+                            />
+                          </FormField>
+                          <Button
+                            primary
+                            label="Comentar"
+                            color={"dark-1"}
+                            type="submit"
+                          />
+                        </Form>
+                      )
+                    }}
+                  </Formik>
+                </Box>
+              </Tab>
             </Tabs>
           </Box>
         </>
