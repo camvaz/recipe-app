@@ -13,6 +13,8 @@ import {
   Text,
 } from "grommet"
 import { Star } from "grommet-icons"
+import { useToasts } from "react-toast-notifications"
+import { useAuthState } from "react-firebase-hooks/auth"
 
 import AppLayout from "components/AppLayout/AppLayout"
 import SEO from "components/SEO/SEO"
@@ -22,6 +24,7 @@ import { SSRError } from "models/SSRError"
 import NotFound from "components/NotFound/NotFound"
 import { FirebaseContext } from "context/FirebaseContext"
 import { Opinion } from "models/Opinion"
+import useUser from "hooks/useUser"
 
 interface RecipeProps {}
 
@@ -30,8 +33,11 @@ const RecipeID: React.FC<
 > = ({ data }) => {
   const size = useContext(ResponsiveContext)
   const router = useRouter()
-  const { firestore } = useContext(FirebaseContext)
+  const { addToast } = useToasts()
+  const { auth, firestore } = useContext(FirebaseContext)
   const [opinions, setOpinions] = useState<Opinion[]>([])
+  const [user] = useAuthState(auth)
+  const userInfo = useUser(user?.email, firestore)
   const { success, error } = data
   const { id } = router.query
 
@@ -93,6 +99,30 @@ const RecipeID: React.FC<
                 icon={<Star />}
                 size="small"
                 color="dark-1"
+                onClick={() => {
+                  if (!user) {
+                    router.push("/login")
+                  }
+
+                  firestore
+                    .collection("users")
+                    .doc(userInfo.id)
+                    .set(
+                      { favoritos: [...userInfo.favoritos, id] },
+                      { merge: true }
+                    )
+                    .then(() =>
+                      addToast("Agregado a favoritos", {
+                        appearance: "success",
+                      })
+                    )
+                    .catch((err) => {
+                      console.log(err)
+                      addToast("Erro al agregar a favoritos", {
+                        appearance: "warning",
+                      })
+                    })
+                }}
               />
             </Box>
             <Tabs>

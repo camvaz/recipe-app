@@ -1,4 +1,5 @@
 import "firebase/firestore"
+import "firebase/storage"
 import "firebase/auth"
 import React from "react"
 import firebase from "firebase/app"
@@ -28,6 +29,7 @@ if (!firebase.apps.length) firebase.initializeApp(firebaseConfig)
 
 export const firestore = firebase.firestore()
 export const auth = firebase.auth()
+export const storage = firebase.storage()
 
 const theme = {
   global: {
@@ -41,7 +43,7 @@ const theme = {
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <FirebaseContext.Provider value={{ firestore, auth }}>
+    <FirebaseContext.Provider value={{ firestore, auth, storage }}>
       <Grommet theme={theme}>
         <ToastProvider placement="bottom-center" autoDismiss={5000}>
           <Component {...pageProps} />

@@ -1,7 +1,5 @@
 import React, { useContext, useState } from "react"
-import Image from "next/image"
-import { Box, Button, Grid, ResponsiveContext, Text, TextInput } from "grommet"
-import { useRouter } from "next/router"
+import { Box, Button, Grid, ResponsiveContext, TextInput } from "grommet"
 import { Search } from "grommet-icons"
 
 import AppLayout from "components/AppLayout/AppLayout"
@@ -9,6 +7,7 @@ import SEO from "components/SEO/SEO"
 import { firestore } from "./_app"
 import { Recipe } from "models/Recipe"
 import { SSRError } from "models/SSRError"
+import RecipePreview from "components/RecipePreview/RecipePreview"
 
 interface indexProps {}
 
@@ -17,7 +16,6 @@ const index: React.FC<
 > = ({ data }) => {
   const [searchText, setSearchText] = useState("")
   const size = useContext(ResponsiveContext)
-  const router = useRouter()
 
   return (
     <AppLayout>
@@ -48,23 +46,7 @@ const index: React.FC<
       <Box width="100%">
         <Grid columns={"26%"} responsive gap="medium">
           {data.success?.map(({ id, imagen, nombre }, i) => (
-            <Box
-              key={i}
-              style={{ cursor: "pointer" }}
-              pad={{ horizontal: "medium", top: "medium", bottom: "small" }}
-              height="fit-content"
-              border={{ style: "groove" }}
-              onClick={() => router.push(`/receta/${id}`)}
-            >
-              <Image
-                src={imagen}
-                layout="responsive"
-                alt="Unsplash"
-                width="300px"
-                height="200px"
-              />
-              <Text margin={{ top: "small" }}>{nombre}</Text>
-            </Box>
+            <RecipePreview id={id} imagen={imagen} nombre={nombre} key={i} />
           ))}
         </Grid>
       </Box>

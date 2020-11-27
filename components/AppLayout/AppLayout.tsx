@@ -86,6 +86,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
         ) : (
           <>
             <Link href="/crear-receta">Crear receta</Link>
+            <Link href="/mis-recetas">Mis recetas</Link>
             <Link href="/mis-favoritos">Mis favoritos</Link>
           </>
         )}

@@ -3,5 +3,5 @@ export interface Recipe {
   nombre: string
   imagen: string
   preparacion: string
-  ingredientes: string[]
+  ingredientes: string
 }
