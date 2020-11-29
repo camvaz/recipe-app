@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react"
-import { Box, Button, Grid, ResponsiveContext, TextInput } from "grommet"
+import { Box, Grid, ResponsiveContext, TextInput } from "grommet"
 import { Search } from "grommet-icons"
 
 import AppLayout from "components/AppLayout/AppLayout"
