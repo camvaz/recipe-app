@@ -35,19 +35,16 @@ const index: React.FC<
           width="100%"
           icon={<Search color="dark-1" />}
         />
-        <Button
-          margin={{ left: "small" }}
-          onClick={() => {}}
-          primary
-          label="Buscar"
-          color="dark-1"
-        />
       </Box>
       <Box width="100%">
         <Grid columns={"26%"} responsive gap="medium">
-          {data.success?.map(({ id, imagen, nombre }, i) => (
-            <RecipePreview id={id} imagen={imagen} nombre={nombre} key={i} />
-          ))}
+          {data.success
+            ?.filter(({ nombre }) =>
+              searchText.length === 0 ? true : nombre.includes(searchText)
+            )
+            .map(({ id, imagen, nombre }, i) => (
+              <RecipePreview id={id} imagen={imagen} nombre={nombre} key={i} />
+            ))}
         </Grid>
       </Box>
     </AppLayout>
