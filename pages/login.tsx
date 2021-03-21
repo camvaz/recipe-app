@@ -33,7 +33,14 @@ const Login: React.FC<LoginProps> = ({}) => {
   return (
     <AuthLayout>
       <SEO title="Entrar" />
-      <Box direction="column" responsive>
+      <Box
+        direction="column"
+        responsive
+        pad="30px"
+        elevation="xlarge"
+        round="large"
+        animation={{ type: 'fadeIn', duration: 4000 }}
+      >
         <Box direction="row" align="center" margin={{ bottom: "medium" }}>
           <Text size={size} margin={{ right: "small" }}>
             ¿Nuevo en FridgeCook?
